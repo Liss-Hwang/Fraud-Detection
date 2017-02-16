@@ -28,12 +28,9 @@ def login(driver):
 #########################################################
 
 def get_report_address(driver):
-    #driver.get("http://thecheat.co.kr/rb/?m=bbs&bid=cheat")
 
     goods = driver.find_element_by_tag_name("tbody")
-    #index = 0
     address_list = []
-    #goods_a = []
     goods_a = goods.find_elements_by_tag_name("a")
 
     for href in goods_a:
