@@ -62,6 +62,7 @@ def get_fraud_address(driver, address_list):
 
     # source_page = []
     # original_article_list = []
+    read_report = 0
 
     for address in address_list:
         driver.switch_to.default_content()
@@ -88,10 +89,19 @@ def get_fraud_address(driver, address_list):
             print("OK")
             driver.find_element_by_tag_name("body").send_keys(Keys.CONTROL + 'w')
 
-    cursor.execute('''Delete from fraud_report where fraud_num is null''')
-    conn.commit()
+        else:
+            print("Finish All Unread Data")
+            read_report +=1
+            if(read_report >3):
+                break
+    if(read_report >3):
+        return 0
+    else:
+        return 1
 
-    print("Finish All Data")
+
+
+
 ##########################################################################
 
 
@@ -249,10 +259,16 @@ def main():
 
         address_list = get_report_address(driver)
 
-        get_fraud_address(driver, address_list)
+        read_count = get_fraud_address(driver, address_list)
 
         print("Finish " + str(index) + " page")
+        if (read_count == 0):
+            break
+
         index += 1
+
+    cursor.execute('''Delete from fraud_report where fraud_num is null''')
+    conn.commit()
 
     print("Complete All Data")
 
